@@ -1,8 +1,9 @@
 from imageai.Detection import ObjectDetection
 import os
 
-project_path = "/Users/fedorkurusin/Documents/HES/cv_project/"
-path_model = project_path + "models/yolov3.pt"
+
+project_path = "/Users/fedorkurusin/Documents/HES/object_capture/"
+path_model = project_path + "models/tiny-yolov3.pt"
 # path_model = project_path + "models/retinanet_resnet50_fpn_coco-eeacb38b.pth"
 path_input = project_path + "animation/frames/111.jpg"
 path_output = project_path + "animation/output/new_" + path_input.split("/")[-1]

@@ -44,9 +44,12 @@ while True:
             confidence = scores[class_id]
 
             # filter out weak detections by ensuring the confidence is greater than the minimum confidence threshold
-            if confidence > 0.5:
+            if confidence > 0.3:
                 # scale the bounding box coordinates back relative to the size of the image, and convert them to integers
-                box = detection[0:4] * np.array([frame.shape[1], frame.shape[0], frame.shape[1], frame.shape[0]])
+                box = detection[0:4] * np.array([frame.shape[1],
+                                                 frame.shape[0],
+                                                 frame.shape[1],
+                                                 frame.shape[0]])
                 (x, y, w, h) = box.astype("int")
 
                 # add the bounding box coordinates, class ID, and confidence to their respective lists
@@ -55,7 +58,12 @@ while True:
                 confidences.append(float(confidence))
 
     # apply non-max suppression to suppress weak, overlapping bounding boxes
-    indices = cv2.dnn.NMSBoxes(boxes, confidences, 0.5, 0.3)
+    # indices = cv2.dnn.NMSBoxes(boxes, confidences, 0.5, 0.3)
+    indices = cv2.dnn.NMSBoxes(boxes,
+                               confidences,
+                               score_threshold=0.7,
+                               nms_threshold=0.4)
+
 
     # loop over the remaining bounding box indices and draw the corresponding bounding box and label
     if len(indices) > 0:

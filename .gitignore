@@ -1,5 +1,6 @@
 # Computer vision pre-trainde models
 archive/
+models/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

@@ -1,15 +1,13 @@
 import cv2
 import numpy as np
+from definitions import *
 
 # load the COCO class labels and corresponding bounding box colors
-labels_path = "archive/coco.names"
-LABELS = open(labels_path).read().strip().split("\n")
+LABELS = open(LABELS_PATH).read().strip().split("\n")
 COLORS = np.random.randint(0, 255, size=(len(LABELS), 3), dtype="uint8")
 
 # load the pre-trained YOLOv3 object detector
-weights_path = "archive/yolov3.weights"
-config_path = "archive/yolov3.cfg"
-net = cv2.dnn.readNetFromDarknet(config_path, weights_path)
+net = cv2.dnn.readNetFromDarknet(CONFIG_PATH, WEIGHTS_PATH)
 
 # get the output layer names for the YOLOv3 model
 layer_names = net.getLayerNames()
@@ -28,7 +26,6 @@ while True:
     # set the input blob for the YOLOv3 object detector and perform a forward pass
     net.setInput(blob)
     outputs = net.forward(output_layers)
-
     # initialize lists to store detected object classes, confidences, and bounding boxes
     class_ids = []
     confidences = []
@@ -55,6 +52,7 @@ while True:
                 # add the bounding box coordinates, class ID, and confidence to their respective lists
                 boxes.append([x, y, w, h])
                 class_ids.append(class_id)
+                print(class_ids)
                 confidences.append(float(confidence))
 
     # apply non-max suppression to suppress weak, overlapping bounding boxes
@@ -65,18 +63,18 @@ while True:
                                nms_threshold=0.4)
 
 
-    # loop over the remaining bounding box indices and draw the corresponding bounding box and label
-    if len(indices) > 0:
-        for i in indices.flatten():
-            (x, y) = (boxes[i][0], boxes[i][1])
-            (w, h) = (boxes[i][2], boxes[i][3])
-            color = [int(c) for c in COLORS[class_ids[i]]]
-            cv2.rectangle(frame, (x, y), (x + w, y + h), color, 2)
-            text = "{}: {:.4f}".format(LABELS[class_ids[i]], confidences[i])
-            cv2.putText(frame, text, (x, y - 5), cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 2)
-
-    # display the original frame with bounding boxes and labels around the detected objects
-    cv2.imshow('frame', frame)
+    # # loop over the remaining bounding box indices and draw the corresponding bounding box and label
+    # if len(indices) > 0:
+    #     for i in indices.flatten():
+    #         (x, y) = (boxes[i][0], boxes[i][1])
+    #         (w, h) = (boxes[i][2], boxes[i][3])
+    #         color = [int(c) for c in COLORS[class_ids[i]]]
+    #         cv2.rectangle(frame, (x, y), (x + w, y + h), color, 2)
+    #         text = "{}: {:.4f}".format(LABELS[class_ids[i]], confidences[i])
+    #         cv2.putText(frame, text, (x, y - 5), cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 2)
+    #
+    # # display the original frame with bounding boxes and labels around the detected objects
+    # cv2.imshow('frame', frame)
 
     # press 'q' to exit the program
     if cv2.waitKey(1) & 0xFF == ord('q'):

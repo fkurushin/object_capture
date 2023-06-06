@@ -1,0 +1,5 @@
+DIR = "archive/"
+LABELS_PATH = DIR + "coco.names"
+WEIGHTS_PATH = DIR + "yolov3.weights"
+CONFIG_PATH = DIR + "yolov3.cfg"
+V5_PATH = "yolov5x.pt"

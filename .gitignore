@@ -1,6 +1,7 @@
 # Computer vision pre-trainde models
 archive/
 models/
+yolov8n.pt
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

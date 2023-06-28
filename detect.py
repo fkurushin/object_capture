@@ -7,6 +7,9 @@ class YOLOv5Detector:
     def __init__(self, weights_path):
         self.model = YOLO(weights_path)
 
+    def train_(self):
+        self.model.train(data='coco128.yaml', epochs=100, imgsz=640)
+
     def detect(self):
         # Open video stream from webcam
         cap = cv2.VideoCapture(0)
@@ -90,18 +93,6 @@ class RedBoxDetector:
 
             # Show the output frame
             cv2.imshow('Red Box Detector', frame)
-
-            # Add a close button to the window
-            cv2.namedWindow('Red Box Detector')
-            close_window_button_img = np.zeros((50, 150, 3), np.uint8)
-            close_window_button_img.fill(255)
-            cv2.putText(close_window_button_img, "Close Window", (10, 35), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 0), 2)
-            cv2.imshow('Close Window', close_window_button_img)
-
-            # Check if the close button is clicked
-            if cv2.getWindowProperty('Close Window', cv2.WND_PROP_VISIBLE) < 1:
-                cv2.destroyAllWindows()
-                break
 
             # Quit if 'q' is pressed
             if cv2.waitKey(1) & 0xFF == ord('q'):
